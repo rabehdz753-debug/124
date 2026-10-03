@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة إرسال البيانات المباشرة</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #25D366 0%, #075E54 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .app-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            padding: 35px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header i { font-size: 45px; color: #25D366; margin-bottom: 10px; }
+        .header h2 { color: #333; font-size: 24px; font-weight: 700; }
+        .header p { color: #666; font-size: 14px; margin-top: 5px; }
+        
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; color: #444; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .form-group i { position: absolute; right: 15px; top: 43px; color: #999; }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus { border-color: #25D366; box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.1); }
+        textarea.form-control { resize: none; }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s;
+        }
+        .btn-submit:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<div class="app-card">
+    <div class="header">
+        <i class="fa-brands fa-whatsapp"></i>
+        <h2>مشاركة المعلومات الفورية</h2>
+        <p>اكتب بياناتك لتنتقل إلى واتساب مباشرة وبدون تسجيل دخول</p>
+    </div>
+
+    <form id="whatsapp-direct-form">
+        <div class="form-group">
+            <label for="name">الاسم الكامل للمستخدم:</label>
+            <i class="fa-regular fa-user"></i>
+            <input type="text" id="name" class="form-control" placeholder="اكتب اسمك هنا" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contact">رقم الهاتف أو وسيلة التواصل:</label>
+            <i class="fa-regular fa-envelope"></i>
+            <input type="text" id="contact" class="form-control" placeholder="كيف يمكننا الاتصال بك؟" required>
+        </div>
+
+        <div class="form-group">
+            <label for="message">المعلومات المراد إرسالها:</label>
+            <i class="fa-regular fa-comment-dots" style="top: 45px;"></i>
+            <textarea id="message" rows="4" class="form-control" placeholder="اكتب تفاصيل معلوماتك هنا..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <span>فتح واتساب وإرسال البيانات</span>
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("whatsapp-direct-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const contact = document.getElementById("contact").value;
+        const message = document.getElementById("message").value;
+
+        const textMessage = `*🔔 إشعار: وصلت بيانات جديدة*\n\n` +
+                            `*👤 الاسم الكامل:* ${name}\n` +
+                            `*📞 وسيلة الاتصال:* ${contact}\n` +
+                            `*📝 التفاصيل المرفوعة:* ${message}`;
+
+        const encodedText = encodeURIComponent(textMessage);
+
+        // تم التحديث هنا إلى الرابط المباشر العالمي والأكثر أماناً لمنع مشكلة "لا يمكن الوصول"
+        const whatsappUrl = `https://wa.me{encodedText}`;
+
+        // فتح الرابط في نفس النافذة لضمان تجاوب الهواتف بدون حظر النوافذ المنبثقة
+        window.location.href = whatsappUrl;
+    });
+</script>
+
+</body>
+</html>
